@@ -16,7 +16,7 @@ const NavBar = () => {
     },
   ];
   return (
-    <aside className="group fixed top-0 left-0 z-35 flex flex-col w-16 hover:w-48 hover:mr-32 h-screen bg-blue-100 hover:bg-blue-950 hover:text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 transition-all duration-300 pb-4">
+    <aside className="group fixed top-0 left-0 z-35 flex flex-col w-16 hover:w-48 h-screen bg-blue-100 hover:bg-blue-950 hover:text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 transition-all duration-300 pb-4">
       <div className="mt-20 flex-1 min-h-0">
         <ul>
           {links.map((link) => {
@@ -28,13 +28,13 @@ const NavBar = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 m-0.5 px-4 py-2 rounded-lg font-bold transition-colors ${
                     isActive
-                      ? "bg-blue-200 text-gray-900" // Active background & text color
-                      : "bg-transparent text-blue-200 hover:text-gray-900 hover:bg-blue-100 dark:text-gray-200 dark:hover:bg-gray-800" // Default state
+                      ? "bg-blue-200 text-gray-900" 
+                      : "bg-transparent hover:text-gray-900 hover:bg-blue-100 dark:text-gray-200 dark:hover:bg-gray-800" 
                   }`
                 }
               >
                 <Icon size={20} className="shrink-0" />
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-100">
                   {link.label}
                 </span>
               </NavLink>

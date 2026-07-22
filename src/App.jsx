@@ -8,13 +8,12 @@ const App = () => {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<RootLayout/>} >
-        <Route path="DashBoard" element={<DashBoard/>} />
+      <Route path="/" element={<RootLayout />}>
+        <Route path="/DashBoard" element={<DashBoard />} />
         <Route path="Contact" element={<Contact />} />
-
-      </Route>
-    )
-  )
+      </Route>,
+    ),
+  );
 
   return (
     <div className="dark:bg-gray-800 dark:text-white flex justify-center items-center mt-16">
