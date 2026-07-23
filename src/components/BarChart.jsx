@@ -9,11 +9,11 @@ import {
   Tooltip,
 } from "recharts";
 
-const BarChartComponent = ({w=400, h=300, d }) => {
+const BarChartComponent = ({ d }) => {
   return (
     <div className="w-full h-56 sm:h-64 md:h-72 lg:h-80">
-      <ResponsiveContainer width={w} height={h}>
-        <BarChart data={d} margin={{ top: 10, right: 20, left: 20, bottom: 25 }}
+      <ResponsiveContainer >
+        <BarChart width={400} height={300} data={d} margin={{ top: 10, right: 20, left: 20, bottom: 25 }}
         >
           <XAxis dataKey="month" tick={{ fontSize: 12 }} tickLine={false} />
           <YAxis
