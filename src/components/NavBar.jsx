@@ -16,7 +16,7 @@ const NavBar = () => {
     },
   ];
   return (
-    <aside className="group fixed top-0 left-0 z-35 flex flex-col w-16 hover:w-48 h-screen bg-blue-100 hover:bg-blue-950 hover:text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 transition-all duration-300 pb-4">
+    <aside className="group fixed top-0 left-0 z-35 flex flex-col w-16 hover:w-64 h-screen bg-blue-100 hover:bg-blue-950 hover:text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 transition-all duration-300 pb-4">
       <div className="mt-20 flex-1 min-h-0">
         <ul>
           {links.map((link) => {
