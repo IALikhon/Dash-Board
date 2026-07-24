@@ -9,7 +9,7 @@ const NotFound = () => {
       </h1>
 
       <button
-        onClick={() => navigate("/Dashboard")}
+        onClick={() => navigate("/")}
         className="mt-6 px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-full shadow-md hover:shadow-lg transition-all duration-200"
       >
         Go Home

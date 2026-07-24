@@ -11,7 +11,7 @@ import {
 
 const BarChartComponent = ({ d }) => {
   return (
-    <div className="w-full h-56 sm:h-64 md:h-72 lg:h-80">
+    <div className="w-full h-56 sm:h-64 md:h-72 lg:h-60">
       <ResponsiveContainer >
         <BarChart width={400} height={300} data={d} margin={{ top: 10, right: 20, left: 20, bottom: 25 }}
         >

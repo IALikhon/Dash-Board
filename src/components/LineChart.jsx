@@ -11,7 +11,7 @@ import {
 
 const LineChartComponent = ({ d }) => {
   return (
-    <div className="w-full h-56 sm:h-64 md:h-72 lg:h-80 ">
+    <div className="w-full h-56 sm:h-64 md:h-72 lg:h-60 ">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={d}
