@@ -11,18 +11,14 @@ import {
 
 const LineChartComponent = ({ d }) => {
   return (
-    <div className="w-full h-56 sm:h-64 md:h-72 lg:h-60 ">
+    <div className=" h-56 sm:h-64 md:h-72 lg:h-60 ">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={d}
-          margin={{ top: 10, right: 20, left: 20, bottom: 25 }}
-        >
+        <LineChart data={d} margin={{ top: 10, right: 10, left: 0, bottom: 10 }}>
           <XAxis dataKey="month" tick={{ fontSize: 12 }} tickLine={false} />
           <YAxis
             tick={{ fontSize: 12 }}
             tickLine={false}
             axisLine={false}
-            /* Converts 10000 -> $10k to save space */
             tickFormatter={(value) =>
               `$${value >= 1000 ? `${value / 1000}k` : value}`
             }

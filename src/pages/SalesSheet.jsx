@@ -1,8 +1,10 @@
 
 const SalesSheet = () => {
     return ( 
-        <div className="size-50">
-            <h1>Sales Sheet</h1>
+        <div className="flex justify-center min-h-screen mt-20">
+            <div>
+                
+            </div>
         </div>
      );
 }

@@ -5,6 +5,7 @@ const ExpenceSheet = () => {
   const [newForm, setNewForm] = useState({
     name: "",
     quantity: 1,
+    price: 0,
     description: "",
   });
 
@@ -13,6 +14,9 @@ const ExpenceSheet = () => {
 
     if (newForm.name.length < 1) {
       return alert("Name Required");
+    }
+    if (newForm.price < 1) {
+      return alert("Price Required");
     }
     if (newForm.description.length < 1) {
       return alert("Description Required");
@@ -32,6 +36,8 @@ const ExpenceSheet = () => {
       <div className="flex flex-col flex-wrap items-center mt-8 min-h-screen gap-4 ml-18">
         <div className=" bg-white min-w-80 p-8 rounded-2xl shadow-lg">
           <div className="flex flex-col md:flex-row gap-2 min-w-50">
+            {/* Product Name */}
+
             <div className={boxClass}>
               <span className="text-xs font-bold">Product Name :</span>
               <input
@@ -44,6 +50,8 @@ const ExpenceSheet = () => {
                 className="border rounded-lg pl-2 md:w-100 "
               />
             </div>
+
+            {/* Product Quantity */}
 
             <div className={boxClass}>
               <span className="text-xs font-bold">Product Quantity : </span>
@@ -58,20 +66,39 @@ const ExpenceSheet = () => {
               />
             </div>
           </div>
-          <div className={boxClass}>
-            <span className="text-xs font-bold">Product Description : </span>
-            <textarea
-              type="text"
-              placeholder="Add description..."
-              value={newForm.description}
-              onChange={(e) =>
-                setNewForm((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              className="border rounded-lg pl-2 md:w-100 min-h-40 "
-            />
+          <div className="flex flex-col gap-2 min-w-50">
+            {/* Product Price */}
+
+            <div className={`${boxClass} inline-2xs`}>
+              <span className="text-xs font-bold">Product Price : </span>
+
+              <input
+                type="number"
+                value={newForm.price}
+                onChange={(e) =>
+                  setNewForm((prev) => ({ ...prev, price: e.target.value }))
+                }
+                className="border rounded-lg pl-2 w-62"
+              />
+            </div>
+
+            {/* Product Description */}
+
+            <div className={boxClass}>
+              <span className="text-xs font-bold">Product Description : </span>
+              <textarea
+                type="text"
+                placeholder="Add description..."
+                value={newForm.description}
+                onChange={(e) =>
+                  setNewForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                className="border rounded-lg pl-2 md:w-100 min-h-40 "
+              />
+            </div>
           </div>
           <button
             onClick={handleSubmit}
