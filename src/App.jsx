@@ -7,6 +7,7 @@ import OverView from "./pages/OverView";
 import Notfound from "./components/NotFound";
 import SalesSheet from "./pages/SalesSheet";
 import ExpenceSheet from "./pages/ExpenceSheet";
+import Demo from "./components/Demo";
 
 const App = () => {
 
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="Overview" element={<OverView />} />
           <Route path="Salessheet" element={<SalesSheet />} />
           <Route path="Expencesheet" element={<ExpenceSheet />} />
+          <Route path="Demo" element={<Demo />}/>
         </Route>
         <Route path="Contact" element={<Contact />} />
         <Route path="*" element={<Notfound />} />
@@ -26,7 +28,7 @@ const App = () => {
   );
 
   return (
-    <div className=" dark:bg-gray-800 dark:text-white flex justify-center items-center mt-10">
+    <div className=" dark:bg-gray-900 dark:text-white bg-gray-200 flex justify-center items-center mt-10">
       <ThemeProvidor>
         <RouterProvider router={router} />
       </ThemeProvidor>
