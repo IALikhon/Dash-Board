@@ -5,7 +5,7 @@ import LineChartComponent from "../components/LineChart";
 import { NavLink } from "react-router-dom";
 
 const DashBoard = () => {
-  const labels = ["Overview", "Salessheet", "Expencesheet", "Demo"];
+  const labels = ["Overview", "Sales", "Inventory"];
 
   return (
     <div className="flex flex-col justify-center px-4 md:px-8 xl:px-10 ml-10 sm:ml-0 snap-y snap-mandatory">

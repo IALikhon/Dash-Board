@@ -6,8 +6,11 @@ const ExpenceSheet = () => {
     name: "",
     quantity: 1,
     price: 0,
+    category: "",
     description: "",
   });
+
+  // const [selectedValue, setSelectedValue] = useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +30,13 @@ const ExpenceSheet = () => {
       console.error("Error Add Inventory Failed: ", error.message);
     }
 
-    setNewForm({ name: "", quantity: 1, description: "" });
+    setNewForm({
+      name: "",
+      quantity: 1,
+      price: 0,
+      category: "",
+      description: "",
+    });
   };
 
   const boxClass = ["flex flex-col gap-2 p-4 shadow-lg rounded-3xl"];
@@ -35,11 +44,11 @@ const ExpenceSheet = () => {
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col flex-wrap items-center mt-8 min-h-screen gap-4 ml-18">
         <div className=" bg-white min-w-80 p-8 rounded-2xl shadow-lg">
-          <div className="flex flex-col md:flex-row gap-2 min-w-50">
+          <div className="flex flex-col flex-wrap md:flex-row gap-2 min-w-50 max-w-260">
             {/* Product Name */}
 
             <div className={boxClass}>
-              <span className="text-xs font-bold">Product Name :</span>
+              <label className="text-xs font-bold">Product Name :</label>
               <input
                 type="text"
                 placeholder="ex: Phone/Laptop..."
@@ -54,7 +63,7 @@ const ExpenceSheet = () => {
             {/* Product Quantity */}
 
             <div className={boxClass}>
-              <span className="text-xs font-bold">Product Quantity : </span>
+              <label className="text-xs font-bold">Product Quantity : </label>
 
               <input
                 type="number"
@@ -65,12 +74,11 @@ const ExpenceSheet = () => {
                 className="border rounded-lg pl-2"
               />
             </div>
-          </div>
-          <div className="flex flex-col gap-2 min-w-50">
+
             {/* Product Price */}
 
-            <div className={`${boxClass} inline-2xs`}>
-              <span className="text-xs font-bold">Product Price : </span>
+            <div className={boxClass}>
+              <label className="text-xs font-bold">Product Price : </label>
 
               <input
                 type="number"
@@ -82,10 +90,27 @@ const ExpenceSheet = () => {
               />
             </div>
 
+            {/* Product Category */}
+
+            <div className={boxClass}>
+              <label className="text-xs font-bold">Product Category : </label>
+
+              <select onChange={(e)=> setNewForm((prev)=> ({...prev, category: e.target.value}))}>
+                <option value="">Choose an option</option>
+                <option value="Electronic">Electronic</option>
+                <option value="Appliences">Appliences</option>
+                <option value="Accesories">Accesories</option>
+                <option value="Tools&Gadgets">Tools&Gadgets</option>
+              </select>
+            </div>
+          </div>
+          <div className="max-w-110 mt-4">
             {/* Product Description */}
 
             <div className={boxClass}>
-              <span className="text-xs font-bold">Product Description : </span>
+              <label className="text-xs font-bold">
+                Product Description :{" "}
+              </label>
               <textarea
                 type="text"
                 placeholder="Add description..."
