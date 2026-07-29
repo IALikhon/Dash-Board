@@ -20,7 +20,7 @@ const DashBoard = () => {
           <BarChartComponent d={data} />
         </div>
       </div>
-      <div className="mx-16 md:mx-16 ">
+      <div className="mx-16 ">
         {labels.map((label) => {
           return (
             <NavLink

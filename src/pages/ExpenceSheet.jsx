@@ -54,7 +54,8 @@ const ExpenceSheet = () => {
     });
   };
 
-  const boxClass = "flex flex-col gap-2 p-4 shadow-lg rounded-3xl";
+  const boxClass =
+    "flex flex-col gap-2 p-4 shadow-lg rounded-3xl  dark:text-black";
   const inputClass = "border rounded-lg pl-2 min-w-60";
 
   return (
