@@ -8,7 +8,7 @@ const DashBoard = () => {
   const labels = ["Overview", "Sales", "Inventory"];
 
   return (
-    <div className="flex flex-col justify-center px-4 md:px-8 xl:px-10 ml-10 sm:ml-0 snap-y snap-mandatory">
+    <div className="flex flex-col justify-center px-4 md:px-8 xl:px-10 ml-15 sm:ml-10 snap-y snap-mandatory">
       <div className="flex flex-wrap justify-center items-center gap-4 mt-8 mb-16 md:mb-4 w-100 sm:w-150 md:w-200 lg:w-300 mx-auto">
         <div className="bg-white rounded-lg shadow p-4 dark:bg-gray-800 dark:text-white w-full max-w-[388px]">
           <AreaChartComponent d={data} />

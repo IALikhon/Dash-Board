@@ -17,7 +17,7 @@ const OverView = () => {
   });
 
   return (
-    <div className="pt-10 pl-20 pr-8 pb-12 min-h-screen bg-slate-50 dark:bg-gray-900 transition-all">
+    <div className="pt-4 mt-4 pl-20 pr-8 pb-12 min-h-screen bg-slate-50 dark:bg-gray-900 transition-all">
       <div className="max-w-6xl mx-auto space-y-6">
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-gray-700">
