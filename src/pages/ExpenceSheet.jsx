@@ -55,13 +55,13 @@ const ExpenceSheet = () => {
   };
 
   const boxClass =
-    "flex flex-col gap-2 p-4 shadow-lg rounded-3xl  dark:text-black";
+    "flex flex-col gap-2 p-4 shadow-lg rounded-3xl  dark:text-black dark:text-white";
   const inputClass = "border rounded-lg pl-2 min-w-60";
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col flex-wrap items-center mt-8 min-h-screen gap-4 ml-18">
-        <div className=" bg-white min-w-80 p-8 rounded-2xl shadow-lg">
+        <div className=" bg-white  dark:bg-gray-800 min-w-80 p-8 rounded-2xl shadow-lg">
           <div className="flex flex-col flex-wrap md:flex-row gap-2 min-w-50 max-w-260">
             {/* Product Name */}
 
@@ -120,7 +120,7 @@ const ExpenceSheet = () => {
               <label className="text-xs font-bold">Product Category : </label>
               <div>
                 <select
-                value={newForm.category}
+                  value={newForm.category}
                   onChange={(e) =>
                     setNewForm((prev) => ({
                       ...prev,
