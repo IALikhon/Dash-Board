@@ -2,6 +2,7 @@ import { useState } from "react";
 import { supabase } from "../Supabase-client/Supabase-client";
 import useFetch from "../hooks/useFetch";
 import useDebounce from "../hooks/useDebounce";
+import { X } from "lucide-react";
 
 const SalesSheet = () => {
   const [query, setQuery] = useState("");
@@ -21,7 +22,7 @@ const SalesSheet = () => {
     : [];
 
   const boxClass =
-    "flex flex-col gap-2 p-4 shadow-lg rounded-3xl dark:text-black dark:text-white";
+    "flex flex-col gap-2 p-4 shadow-lg rounded-3xl dark:text-black dark:text-white max-h-20";
   const inputClass = "border rounded-lg pl-2 min-w-60";
 
   const [newForm, setNewForm] = useState({
@@ -118,23 +119,29 @@ const SalesSheet = () => {
 
             {/* Add Items */}
 
-            <div className={boxClass}>
-              <label className="text-xs font-bold">Add Items : </label>
-              <input
-                type="text"
-                className={`${inputClass} sm:w-130`}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
+            <div className="flex flex-col relative transition-all duration-600">
+              <div className={boxClass}>
+                <label className="text-xs font-bold">Add Items : </label>
+                <input
+                  type="text"
+                  className={`${inputClass} sm:w-130 `}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
               {query.length > 0 && (
-
-                <ul className="flex flex-col gap-4 z-20">
+                <ul className="flex flex-col absolute top-20 bg-white w-full px-4 gap-2 z-20 rounded-2xl">
                   {filteredData.map((item) => {
-                    return <li key={item.id} className="capitalize">{item.name} - ${item.price}</li>;
+                    return (
+                      <li key={item.id} className="capitalize  py-2 ">
+                        {item.name} - ${item.price}
+                      </li>
+                    );
                   })}
                 </ul>
               )}
-              
+
+              <button className="absolute top-8 left-125 p-2" onClick={()=>setQuery("")}><X/></button>
             </div>
 
             {/* Add Quantity */}
