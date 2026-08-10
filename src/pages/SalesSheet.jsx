@@ -7,13 +7,15 @@ import { X } from "lucide-react";
 const SalesSheet = () => {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query);
-  const { data = [], error, loading } = useFetch(debouncedQuery);
+  const { data, error, loading } = useFetch(debouncedQuery);
 
   const currentDay = new Date().getDate();
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
   const weekDay = new Date().toLocaleDateString("en-US", { weekday: "long" });
   const currentDate = `${currentDay} / ${currentMonth} / ${currentYear} - ${weekDay}`;
+
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   const filteredData = Array.isArray(data)
     ? data.filter((item) =>
@@ -23,7 +25,7 @@ const SalesSheet = () => {
 
   const boxClass =
     "flex flex-col gap-2 p-4 shadow-lg rounded-3xl dark:text-black dark:text-white max-h-20";
-  const inputClass = "border rounded-lg pl-2 min-w-60";
+  const inputClass = "border rounded-lg pl-2 min-w-60 capitalize";
 
   const [newForm, setNewForm] = useState({
     date: { currentDate },
@@ -35,6 +37,17 @@ const SalesSheet = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(newForm.customar_name.length < 1){
+      return alert("Enter Your Name")
+    }
+    if(newForm.phone_number.length < 1 || newForm.phone_number.length > 15){
+      return alert("Enter a Valid Number")
+    }
+
+    if(newForm.items.itemQuantity < 1){
+      return alert("Enter Quantity")
+    }
 
     const { data, error } = await supabase
       .from("sales_sheet")
@@ -57,20 +70,45 @@ const SalesSheet = () => {
     });
   };
 
+  console.log(newForm);
+  
+
+  const [selectedItem, setSelectedItem] = useState({
+    itemName: null,
+    itemQuantity: null,
+    itemPrice: null,
+  });
+
   const addItem = (e) => {
     e.preventDefault();
 
+    if (!selectedItem.itemName) {
+      alert("Please select an item ");
+      return;
+    }
+    if (selectedItem.itemQuantity < 1) {
+      alert("Please select Quantity ");
+      return;
+    }
+
     setNewForm((prev) => ({
       ...prev,
-      items: [...prev.items, e.target.value],
+      items: [...prev.items, selectedItem],
     }));
+
+    setQuery("");
+    setSelectedItem({
+      itemName: null,
+      itemQuantity: null,
+      itemPrice: null,
+    });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col flex-wrap items-center mt-8 min-h-screen gap-4 ml-18">
-        <div className=" bg-white  dark:bg-gray-800 min-w-80 min-h-120 p-8 rounded-2xl shadow-lg">
-          <div className="flex flex-col flex-wrap  md:flex-row gap-2 min-w-50 max-w-260">
+      <div className="flex flex-col items-center mt-8 min-h-screen gap-4 ml-18">
+        <div className=" bg-white dark:bg-gray-800 min-w-80 min-h-120 p-8 rounded-2xl shadow-lg">
+          <div className="flex flex-col flex-wrap sm:flex-row gap-2 min-w-50 max-w-260">
             {/* Customar Name */}
 
             <div className={boxClass}>
@@ -126,14 +164,32 @@ const SalesSheet = () => {
                   type="text"
                   className={`${inputClass} sm:w-130 `}
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setIsDropDownOpen(true);
+                  }}
                 />
               </div>
-              {query.length > 0 && (
+              {isDropDownOpen && query.length > 0 && (
                 <ul className="flex flex-col absolute top-20 bg-white w-full px-4 gap-2 z-20 rounded-2xl">
                   {filteredData.map((item) => {
                     return (
-                      <li key={item.id} className="capitalize  py-2 ">
+                      <li
+                        key={item.id}
+                        className="capitalize  py-2 cursor-pointer"
+                        onClick={() => {
+                          setSelectedItem((prev) => ({
+                            ...prev,
+                            itemName: item.name,
+                          }));
+                          setQuery(item.name);
+                          setSelectedItem((prev) => ({
+                            ...prev,
+                            itemPrice: item.price,
+                          }));
+                          setIsDropDownOpen(false);
+                        }}
+                      >
                         {item.name} - ${item.price}
                       </li>
                     );
@@ -141,15 +197,32 @@ const SalesSheet = () => {
                 </ul>
               )}
 
-              <button className="absolute top-8 left-125 p-2" onClick={()=>setQuery("")}><X/></button>
+              <button
+                className="absolute top-8 left-125 p-2"
+                onClick={() => setQuery("")}
+              >
+                <X />
+              </button>
             </div>
 
             {/* Add Quantity */}
 
             <div className={boxClass}>
               <label className="text-xs font-bold">Add Quantity : </label>
-              <input type="number" className={inputClass} />
+              <input
+                type="number"
+                className={inputClass}
+                value={selectedItem.itemQuantity}
+                onChange={(e) =>
+                  setSelectedItem((prev) => ({
+                    ...prev,
+                    itemQuantity: Number(e.target.value),
+                  }))
+                }
+              />
             </div>
+
+            {/* Add Button */}
 
             <div className=" flex justify-center items-center">
               <button
@@ -162,13 +235,37 @@ const SalesSheet = () => {
             </div>
           </div>
 
+          {/* Product List */}
           <div className="mt-8">
             <ul className=" dark:text-white">
-              {newForm.items.map((item, indx) => {
-                return <li key={indx}> {item}</li>;
-              })}
+              {newForm.items.map((cartItem, indx) => (
+                <li
+                  key={indx}
+                  className="flex justify-between border-b pb-1 capitalize mx-20 py-2 font-bold"
+                >
+                  <span>{cartItem.itemName}</span>
+                  <span>{cartItem.itemQuantity}</span>
+                  <span>
+                    {Number(cartItem.itemQuantity) * Number(cartItem.itemPrice)}
+                  </span>
+                </li>
+              ))}
             </ul>
+            <div className="flex justify-end py-8 px-8 mx-8 underline font-bold">
+              Total:{" "}
+              {newForm.items.reduce((total, item) => {
+                return (
+                  total + Number(item.itemQuantity) * Number(item.itemPrice)
+                );
+              }, 0)}
+            </div>
           </div>
+          <button
+            type="submit"
+            className="float-right font-bold text-white px-6 py-3 m-6 bg-green-500 hover:bg-green-600 rounded-2xl"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </form>
