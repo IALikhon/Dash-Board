@@ -44,7 +44,9 @@ const SalesSheet = () => {
     if(newForm.phone_number.length < 1 || newForm.phone_number.length > 15){
       return alert("Enter a Valid Number")
     }
-
+    if (newForm.items.length === 0) {
+      return alert("Please add at least one item");
+    }
     if(newForm.items.itemQuantity < 1){
       return alert("Enter Quantity")
     }
@@ -91,9 +93,12 @@ const SalesSheet = () => {
       return;
     }
 
+    const itemTotal = Number(selectedItem.itemQuantity) * Number(selectedItem.itemPrice);
+
     setNewForm((prev) => ({
       ...prev,
       items: [...prev.items, selectedItem],
+      total_price: Number((prev.total_price || 0) + itemTotal)
     }));
 
     setQuery("");
@@ -181,12 +186,9 @@ const SalesSheet = () => {
                           setSelectedItem((prev) => ({
                             ...prev,
                             itemName: item.name,
-                          }));
-                          setQuery(item.name);
-                          setSelectedItem((prev) => ({
-                            ...prev,
                             itemPrice: item.price,
                           }));
+                          setQuery(item.name);
                           setIsDropDownOpen(false);
                         }}
                       >
@@ -212,7 +214,7 @@ const SalesSheet = () => {
               <input
                 type="number"
                 className={inputClass}
-                value={selectedItem.itemQuantity}
+                value={selectedItem.itemQuantity || ""}
                 onChange={(e) =>
                   setSelectedItem((prev) => ({
                     ...prev,
@@ -252,12 +254,7 @@ const SalesSheet = () => {
               ))}
             </ul>
             <div className="flex justify-end py-8 px-8 mx-8 underline font-bold">
-              Total:{" "}
-              {newForm.items.reduce((total, item) => {
-                return (
-                  total + Number(item.itemQuantity) * Number(item.itemPrice)
-                );
-              }, 0)}
+              Total: {newForm.total_price || 0}
             </div>
           </div>
           <button
