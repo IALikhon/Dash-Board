@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 const SalesSheet = () => {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query);
-  const { data, error, loading } = useFetch(debouncedQuery);
+  const { data } = useFetch(debouncedQuery);
 
   const currentDay = new Date().getDate();
   const currentMonth = new Date().getMonth() + 1;
@@ -35,46 +35,6 @@ const SalesSheet = () => {
     total_price: "",
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if(newForm.customar_name.length < 1){
-      return alert("Enter Your Name")
-    }
-    if(newForm.phone_number.length < 1 || newForm.phone_number.length > 15){
-      return alert("Enter a Valid Number")
-    }
-    if (newForm.items.length === 0) {
-      return alert("Please add at least one item");
-    }
-    if(newForm.items.itemQuantity < 1){
-      return alert("Enter Quantity")
-    }
-
-    const { data, error } = await supabase
-      .from("sales_sheet")
-      .insert([newForm])
-      .select();
-
-    if (error) {
-      console.error("Error Add Inventory Failed: ", error.message);
-      return;
-    }
-
-    console.log(data);
-
-    setNewForm({
-      date: { currentDate },
-      customar_name: "",
-      phone_number: "",
-      items: [],
-      total_price: "",
-    });
-  };
-
-  console.log(newForm);
-  
-
   const [selectedItem, setSelectedItem] = useState({
     itemName: null,
     itemQuantity: null,
@@ -93,12 +53,13 @@ const SalesSheet = () => {
       return;
     }
 
-    const itemTotal = Number(selectedItem.itemQuantity) * Number(selectedItem.itemPrice);
+    const itemTotal =
+      Number(selectedItem.itemQuantity) * Number(selectedItem.itemPrice);
 
     setNewForm((prev) => ({
       ...prev,
       items: [...prev.items, selectedItem],
-      total_price: Number((prev.total_price || 0) + itemTotal)
+      total_price: Number((prev.total_price || 0) + itemTotal),
     }));
 
     setQuery("");
@@ -107,6 +68,88 @@ const SalesSheet = () => {
       itemQuantity: null,
       itemPrice: null,
     });
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (newForm.customar_name.length < 1) {
+      return alert("Enter Your Name");
+    }
+    if (newForm.phone_number.length < 1 || newForm.phone_number.length > 15) {
+      return alert("Enter a Valid Number");
+    }
+    if (newForm.items.length === 0) {
+      return alert("Please add at least one item");
+    }
+
+    try {
+      for (const cartItem of newForm.items) {
+
+        // Fetch current Data 
+
+        const { data: cartData, error: cartErr } = await supabase
+          .from("inventory")
+          .select("quantity")
+          .eq("name", cartItem.itemName)
+          .single()
+
+        if(cartErr || !cartData){
+          console.log(`Failed to Fetch Data: ${cartItem.itemName}`, cartErr.message);
+         return alert(`Failed to Fetch Data: ${cartItem.itemName}`)
+        }
+
+        const currentQty = Number(cartData.quantity ?? 0);
+        const soldQty = Number(cartItem.itemQuantity)
+
+        const newStock = currentQty - soldQty;     
+
+        if(newStock < 1){
+         return alert(`Out of ${cartItem.name}`)
+        }
+
+        // update Item Data to new Data
+
+        const {error:updateErr} = await supabase
+        .from("inventory")
+        .update({quantity: newStock})
+        .eq("name", cartItem.itemName)
+
+        if(updateErr){
+          console.log(`Failed to Update ${cartItem.itemName}`, updateErr.message);
+         return alert(`Failed to Update ${cartItem.itemName}`);
+        }
+
+        // Add Data to Sales Sheet
+
+        const {data:salesData, error:salesErr} = await supabase
+        .from("sales_sheet")
+        .insert([newForm])
+        .select()
+
+        if(salesErr){
+          console.log(`Failed to Add sales Sheet with new sales`, salesErr.message);
+         alert(`Failed to Add sales Sheet with new sales ${cartItem.itemName}`); 
+        }
+
+        console.log(`Sales data Added succesfully ${salesData}`);
+         alert("Sale recorded & inventory Added successfully!");
+
+        // Reset newForm
+
+        setNewForm({
+          date: { currentDate },
+          customar_name: "",
+          phone_number: "",
+          items: [],
+          total_price: "",
+        });
+
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
