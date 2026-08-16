@@ -14,6 +14,12 @@ const ExpenceSheet = () => {
     description: "",
   });
 
+  const overview = {
+    date: today,
+    items : newForm.name,
+    total_price: newForm.price,
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -41,6 +47,20 @@ const ExpenceSheet = () => {
     }
 
     console.log(data);
+
+    // Add Data to Overview
+
+    const {error:overErr} = await supabase
+    .from("overview")
+    .insert([overview])
+    .select()
+
+    if(overErr){
+      console.log("Failed to Add Data to overView", overErr.message);
+      return alert("Failed to Add Data to overView", overErr.message);
+    }
+
+
     
 
     setNewForm({

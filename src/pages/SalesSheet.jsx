@@ -35,6 +35,12 @@ const SalesSheet = () => {
     total_price: "",
   });
 
+  const overview = {
+    date : {currentDate},
+    items : newForm.items,
+    total_price : newForm.total_price,
+  }
+
   const [selectedItem, setSelectedItem] = useState({
     itemName: null,
     itemQuantity: null,
@@ -130,11 +136,26 @@ const SalesSheet = () => {
 
         if(salesErr){
           console.log(`Failed to Add sales Sheet with new sales`, salesErr.message);
-         alert(`Failed to Add sales Sheet with new sales ${cartItem.itemName}`); 
+         return alert(`Failed to Add sales Sheet with new sales ${cartItem.itemName}`); 
         }
 
         console.log(`Sales data Added succesfully ${salesData}`);
          alert("Sale recorded & inventory Added successfully!");
+
+        // Add data to over view
+
+        const{data:overviewData, error:overErr} = await supabase
+        .from("overview")
+        .insert([overview])
+        .select()
+
+        if(overErr){
+          console.log("Failed to add Data to Overview", overErr.message);
+          return alert("Failed to add Data to Overview", overErr.message);
+        }
+
+        console.log(`OverView Data Added Succesfully ${overviewData}`);
+        
 
         // Reset newForm
 

@@ -27,7 +27,7 @@ const DashBoard = () => {
               to={`${label}`}
               key={label}
               className={({ isActive }) =>
-                `mr-2 snap-center px-2 border rounded-2xl p-2 ${isActive ? "border-2 font-bold" : "text-sm"}`
+                `mr-2 snap-center px-2 border rounded-2xl p-2 ${isActive ? " bg-green-500 text-white font-bold" : "text-sm"}`
               }
             >
               {label}
