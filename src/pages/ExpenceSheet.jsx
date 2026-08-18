@@ -2,7 +2,11 @@ import { useState } from "react";
 import { supabase } from "../Supabase-client/Supabase-client";
 
 const ExpenceSheet = () => {
-  const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+  const currentDay = new Date().getDate();
+  const currentMonth = new Date().getMonth() + 1;
+  const currentYear = new Date().getFullYear();
+  const weekDay = new Date().toLocaleDateString("en-US", { weekday: "long" });
+  const currentDate = `${currentDay} / ${currentMonth} / ${currentYear} - ${weekDay}`;
 
   const [newForm, setNewForm] = useState({
     name: "",
@@ -10,14 +14,15 @@ const ExpenceSheet = () => {
     price: 0,
     category: "",
     image: "",
-    weekDay: today,
+    weekDay: currentDate,
     description: "",
   });
 
   const overview = {
-    date: today,
+    date: currentDate,
     items : newForm.name,
     total_price: newForm.price,
+    type: "Purchased",
   }
 
   const handleSubmit = async (e) => {
@@ -69,7 +74,7 @@ const ExpenceSheet = () => {
       price: 0,
       category: "",
       image: "",
-      weekDay: today,
+      weekDay: currentDate,
       description: "",
     });
   };

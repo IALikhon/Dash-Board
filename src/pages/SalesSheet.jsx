@@ -28,7 +28,7 @@ const SalesSheet = () => {
   const inputClass = "border rounded-lg pl-2 min-w-60 capitalize";
 
   const [newForm, setNewForm] = useState({
-    date: { currentDate },
+    date: currentDate ,
     customar_name: "",
     phone_number: "",
     items: [],
@@ -36,9 +36,10 @@ const SalesSheet = () => {
   });
 
   const overview = {
-    date : {currentDate},
+    date : currentDate,
     items : newForm.items,
     total_price : newForm.total_price,
+    type: "Sold",
   }
 
   const [selectedItem, setSelectedItem] = useState({
@@ -230,7 +231,7 @@ const SalesSheet = () => {
               <label className="text-xs font-bold"> Date : </label>
               <input
                 type="text"
-                value={newForm.date.currentDate}
+                value={currentDate}
                 className={inputClass}
                 disabled
               />

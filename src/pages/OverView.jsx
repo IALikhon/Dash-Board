@@ -23,7 +23,7 @@ const OverView = () => {
             <div key={item.id}
             className="mx-20"
             >
-              <p>{item.created_at}</p>
+              <p>{item.date}</p>
             </div>
           )
         })}
