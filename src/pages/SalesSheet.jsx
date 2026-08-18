@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { supabase } from "../Supabase-client/Supabase-client";
 import useFetch from "../hooks/useFetch";
-import useDebounce from "../hooks/useDebounce";
-import { X } from "lucide-react";
+// import useDebounce from "../hooks/useDebounce";
+import { Trash, X } from "lucide-react";
 
 const SalesSheet = () => {
   const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query);
-  const { data } = useFetch(debouncedQuery);
+  // const debouncedQuery = useDebounce(query);
+  const { data } = useFetch("inventory");
 
   const currentDay = new Date().getDate();
   const currentMonth = new Date().getMonth() + 1;
@@ -49,6 +49,7 @@ const SalesSheet = () => {
 
   const addItem = (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!selectedItem.itemName) {
       alert("Please select an item ");
@@ -76,12 +77,23 @@ const SalesSheet = () => {
     });
   };
 
+  const clearItem = (name) => {
+    const newItems = newForm.items.filter((item) => (item.itemName !== name));
+
+    const newTotal = newItems.reduce((total, item) => total + Number(item.itemQuantity) * Number(item.itemPrice),0);
+
+    setNewForm((prev) => ({
+      ...prev,
+      items: newItems,
+      total_price: newTotal,
+    }))
+  }  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (newForm.customar_name.length < 1) {
-      return alert("Enter Your Name");
+      return alert("Enter Customer's Name");
     }
     if (newForm.phone_number.length < 1 || newForm.phone_number.length > 15) {
       return alert("Enter a Valid Number");
@@ -111,8 +123,8 @@ const SalesSheet = () => {
 
         const newStock = currentQty - soldQty;     
 
-        if(newStock < 1){
-         return alert(`Out of ${cartItem.name}`)
+        if(newStock <= 0){
+         return alert(`Out of ${cartItem.itemName}`)
         }
 
         // update Item Data to new Data
@@ -263,12 +275,17 @@ const SalesSheet = () => {
                 </ul>
               )}
 
-              <button
-                className="absolute top-8 left-125 p-2"
-                onClick={() => setQuery("")}
-              >
-                <X />
-              </button>
+              {query !== "" && (
+                <button
+                  className="absolute top-8 left-125 p-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setQuery("");
+                  }}
+                >
+                  <X />
+                </button>
+              )}
             </div>
 
             {/* Add Quantity */}
@@ -304,6 +321,13 @@ const SalesSheet = () => {
           {/* Product List */}
           <div className="mt-8">
             <ul className=" dark:text-white">
+              <li className="flex justify-between border-b-2 mb-4 capitalize mx-20 py-2 font-extrabold">
+                <span>Item Name</span>
+                <span>Quantity</span>
+                <span>Unit Price</span>
+                <span></span>
+                <span></span>
+              </li>
               {newForm.items.map((cartItem, indx) => (
                 <li
                   key={indx}
@@ -314,6 +338,15 @@ const SalesSheet = () => {
                   <span>
                     {Number(cartItem.itemQuantity) * Number(cartItem.itemPrice)}
                   </span>
+
+                  {/* Clear Button */}
+
+                  <button 
+                  type="button"
+                  onClick={() => clearItem(cartItem.itemName)}
+                  className="flex flex-row bg-red-600 hover:bg-red-700 text-white hover:font-extrabold gap-2 px-4 py-2 mx-2 rounded-3xl">
+                    <Trash size={18} /> Clear
+                  </button>
                 </li>
               ))}
             </ul>
