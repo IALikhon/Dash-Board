@@ -10,20 +10,13 @@ const ExpenceSheet = () => {
 
   const [newForm, setNewForm] = useState({
     name: "",
-    quantity: 1,
-    price: 0,
+    quantity: null,
+    price: null,
     category: "",
     image: "",
     weekDay: currentDate,
     description: "",
   });
-
-  const overview = {
-    date: currentDate,
-    items : newForm.name,
-    total_price: newForm.price,
-    type: "Purchased",
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,6 +48,15 @@ const ExpenceSheet = () => {
 
     // Add Data to Overview
 
+    const overview = {
+      date: currentDate,
+      items: newForm.name,
+      total_price: newForm.price,
+      type: "Purchased",
+    };
+  
+  
+
     const {error:overErr} = await supabase
     .from("overview")
     .insert([overview])
@@ -70,8 +72,8 @@ const ExpenceSheet = () => {
 
     setNewForm({
       name: "",
-      quantity: 1,
-      price: 0,
+      quantity: null,
+      price: null,
       category: "",
       image: "",
       weekDay: currentDate,

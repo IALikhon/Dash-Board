@@ -16,7 +16,7 @@ const useFetch = ( table ) => {
         let query = supabase
           .from(table)
           .select("*")
-          .order("created_at", { ascending: true });
+          .order("created_at", { ascending: false });
 
         const { data, error } = await query;
 

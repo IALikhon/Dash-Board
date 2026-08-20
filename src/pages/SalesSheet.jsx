@@ -35,13 +35,6 @@ const SalesSheet = () => {
     total_price: "",
   });
 
-  const overview = {
-    date : currentDate,
-    items : newForm.items,
-    total_price : newForm.total_price,
-    type: "Sold",
-  }
-
   const [selectedItem, setSelectedItem] = useState({
     itemName: null,
     itemQuantity: null,
@@ -140,47 +133,55 @@ const SalesSheet = () => {
          return alert(`Failed to Update ${cartItem.itemName}`);
         }
 
-        // Add Data to Sales Sheet
-
-        const {data:salesData, error:salesErr} = await supabase
-        .from("sales_sheet")
-        .insert([newForm])
-        .select()
-
-        if(salesErr){
-          console.log(`Failed to Add sales Sheet with new sales`, salesErr.message);
-         return alert(`Failed to Add sales Sheet with new sales ${cartItem.itemName}`); 
-        }
-
-        console.log(`Sales data Added succesfully ${salesData}`);
-         alert("Sale recorded & inventory Added successfully!");
-
-        // Add data to over view
-
-        const{data:overviewData, error:overErr} = await supabase
-        .from("overview")
-        .insert([overview])
-        .select()
-
-        if(overErr){
-          console.log("Failed to add Data to Overview", overErr.message);
-          return alert("Failed to add Data to Overview", overErr.message);
-        }
-
-        console.log(`OverView Data Added Succesfully ${overviewData}`);
         
-
-        // Reset newForm
-
-        setNewForm({
-          date: { currentDate },
-          customar_name: "",
-          phone_number: "",
-          items: [],
-          total_price: "",
-        });
-
       }
+      // Add Data to Sales Sheet
+
+      const {data:salesData, error:salesErr} = await supabase
+      .from("sales_sheet")
+      .insert([newForm])
+      .select()
+
+      if(salesErr){
+        console.log(`Failed to Add sales Sheet with new sales`, salesErr.message);
+       return alert(`Failed to Add sales Sheet with new sales `); 
+      }
+
+      console.log(`Sales data Added succesfully ${salesData}`);
+       alert("Sale recorded & inventory Added successfully!");
+
+      // Add data to over view
+
+      const overview = {
+        date: currentDate,
+        items: newForm.items,
+        total_price: newForm.total_price,
+        type: "Sold",
+      };
+    
+
+      const{data:overviewData, error:overErr} = await supabase
+      .from("overview")
+      .insert([overview])
+      .select()
+
+      if(overErr){
+        console.log("Failed to add Data to Overview", overErr.message);
+        return alert("Failed to add Data to Overview", overErr.message);
+      }
+
+      console.log(`OverView Data Added Succesfully ${overviewData}`);
+      
+
+      // Reset newForm
+
+      setNewForm({
+        date: { currentDate },
+        customar_name: "",
+        phone_number: "",
+        items: [],
+        total_price: "",
+      });
     } catch (err) {
       console.log(err);
     }
@@ -188,7 +189,7 @@ const SalesSheet = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col items-center mt-8 min-h-screen gap-4 ml-18">
+      <div className="flex flex-col items-center mt-8 min-h-screen gap-4 ml-16">
         <div className=" bg-white dark:bg-gray-800 min-w-80 min-h-120 p-8 rounded-2xl shadow-lg">
           <div className="flex flex-col flex-wrap sm:flex-row gap-2 min-w-50 max-w-260">
             {/* Customar Name */}
@@ -321,36 +322,70 @@ const SalesSheet = () => {
 
           {/* Product List */}
           <div className="mt-8">
-            <ul className=" dark:text-white">
-              <li className="flex justify-between border-b-2 mb-4 capitalize mx-20 py-2 font-extrabold">
-                <span>Item Name</span>
-                <span>Quantity</span>
-                <span>Unit Price</span>
-                <span></span>
-                <span></span>
-              </li>
-              {newForm.items.map((cartItem, indx) => (
-                <li
-                  key={indx}
-                  className="flex justify-between border-b pb-1 capitalize mx-20 py-2 font-bold"
-                >
-                  <span>{cartItem.itemName}</span>
-                  <span>{cartItem.itemQuantity}</span>
-                  <span>
-                    {Number(cartItem.itemQuantity) * Number(cartItem.itemPrice)}
-                  </span>
+            <div className="mt-8 bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/60 shadow-inner">
+              <div className="max-w-4xl mx-auto">
+                {/* Table Header */}
+                <div className="grid grid-cols-12 gap-4 pb-3 border-b-2 border-gray-200 dark:border-gray-700 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-4">
+                  <span className="col-span-4">Item Name</span>
+                  <span className="col-span-3 text-center">Quantity</span>
+                  <span className="col-span-3 text-right">Subtotal</span>
+                  <span className="col-span-2 text-center">Action</span>
+                </div>
 
-                  {/* Clear Button */}
+                {/* Cart Items List */}
+                <ul className="divide-y divide-gray-200/60 dark:divide-gray-700/60">
+                  {newForm.items.length > 0 ? (
+                    newForm.items.map((cartItem, indx) => {
+                      const subtotal =
+                        Number(cartItem.itemQuantity || 0) *
+                        Number(cartItem.itemPrice || 0);
 
-                  <button 
-                  type="button"
-                  onClick={() => clearItem(cartItem.itemName)}
-                  className="flex flex-row bg-red-600 hover:bg-red-700 text-white hover:font-extrabold gap-2 px-4 py-2 mx-2 rounded-3xl">
-                    <Trash size={18} /> Clear
-                  </button>
-                </li>
-              ))}
-            </ul>
+                      return (
+                        <li
+                          key={indx}
+                          className="grid grid-cols-12 gap-4 items-center py-3 px-4 text-sm font-medium transition-colors hover:bg-white dark:hover:bg-gray-800 rounded-xl my-1 group"
+                        >
+                          {/* Item Name */}
+                          <span className="col-span-4 capitalize text-gray-800 dark:text-gray-100 font-semibold truncate">
+                            {cartItem.itemName}
+                          </span>
+
+                          {/* Quantity */}
+                          <span className="col-span-3 text-center text-gray-600 dark:text-gray-300">
+                            <span className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2.5 py-1 rounded-md text-xs font-bold">
+                              {cartItem.itemQuantity}
+                            </span>
+                          </span>
+
+                          {/* Subtotal */}
+                          <span className="col-span-3 text-right font-semibold text-gray-900 dark:text-white">
+                            ${subtotal.toLocaleString()}
+                          </span>
+
+                          {/* Action Button */}
+                          <div className="col-span-2 flex justify-center">
+                            <button
+                              type="button"
+                              onClick={() => clearItem(cartItem.itemName)}
+                              className="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-white bg-red-50 dark:bg-red-950/40 hover:bg-red-600 dark:hover:bg-red-600 px-3 py-1.5 rounded-lg transition-all duration-200 font-medium active:scale-95 shadow-sm"
+                              title="Remove item"
+                            >
+                              <Trash size={15} />
+                              <span className="hidden sm:inline">Remove</span>
+                            </button>
+                          </div>
+                        </li>
+                      );
+                    })
+                  ) : (
+                    /* Empty Cart State */
+                    <li className="py-8 text-center text-gray-400 dark:text-gray-500 text-sm italic">
+                      No items added to cart yet.
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </div>
             <div className="flex justify-end py-8 px-8 mx-8 underline font-bold">
               Total: {newForm.total_price || 0}
             </div>
