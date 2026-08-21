@@ -8,10 +8,12 @@ const NavBar = () => {
   const links = [
     {
       label: "Dashboard",
+      link: "/",
       icon: LayoutDashboard,
     },
     {
       label: "Contact",
+      link: "Contact",
       icon: MessageCircle,
     },
   ];
@@ -23,7 +25,7 @@ const NavBar = () => {
             const Icon = link.icon;
             return (
               <NavLink
-                to={`/${link.label}`}
+                to={`/${link.link}`}
                 key={link.label}
                 className={({ isActive }) =>
                   `flex items-center gap-3 m-0.5 px-4 py-2 rounded-lg font-bold transition-colors ${

@@ -7,7 +7,6 @@ import OverView from "./pages/OverView";
 import Notfound from "./components/NotFound";
 import SalesSheet from "./pages/SalesSheet";
 import ExpenceSheet from "./pages/ExpenceSheet";
-import Demo from "./components/Demo";
 
 const App = () => {
 
@@ -19,7 +18,6 @@ const App = () => {
           <Route path="Overview" element={<OverView />} />
           <Route path="Sales" element={<SalesSheet />} />
           <Route path="Inventory" element={<ExpenceSheet />} />
-          <Route path="Demo" element={<Demo />}/>
         </Route>
         <Route path="Contact" element={<Contact />} />
         <Route path="*" element={<Notfound />} />
